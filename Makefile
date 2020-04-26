@@ -13,6 +13,8 @@ SRCDIR		=	Src/
 INCDIR		=	Include/
 
 SRC		=	$(SRCDIR)Main.cpp \
+			$(SRCDIR)World.cpp \
+			$(SRCDIR)Player.cpp \
 
 OBJ		=	$(SRC:.cpp=.o)
 
