@@ -13,7 +13,7 @@ class Player
 {
 public:
     Player(const Vector2u &_position, const World &_world);
-    const Vector2u &getPosition() const;
+    Vector2u getPosition() const;
     const Vector2f &getFloatPosition() const;
     const Vector2u &getSize() const;
     void update();
@@ -21,7 +21,6 @@ public:
 
 private:
     const World &world;
-    Vector2u position;
     Vector2f floatPosition;
     Texture texture;
 };

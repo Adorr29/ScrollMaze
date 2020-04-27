@@ -22,11 +22,11 @@ enum CellType
 class World
 {
 public:
-    World(const Vector2u &_size);
+    World(const Vector2u &_size, const Vector2f &_cellSize);
     ~World();
     const Vector2u &getSize() const;
+    const Vector2f &getOrigin() const;
     const Vector2f &getCellSize() const;
-    void setCellSize(const Vector2f &_cellSize);
     void aff(RenderTarget &target) const;
 
 private:
@@ -37,6 +37,7 @@ private:
 private:
     Vector2u size;
     CellType **tab;
+    Vector2f origin;
     Vector2f cellSize;
     Texture textures[TypeCount];
 };

@@ -8,16 +8,17 @@
 #include "Player.hpp"
 
 Player::Player(const Vector2u &_position, const World &_world)
-    : world(_world),
-      position(_position)
+    : world(_world)
 {
+    floatPosition.x = _position.x * world.getCellSize().x + world.getOrigin().x;
+    floatPosition.y = _position.y * world.getCellSize().y + world.getOrigin().y;
     if (!texture.loadFromFile("Resources/Texture/Player.png"))
         return; // TODO throw
 }
 
-const Vector2u &Player::getPosition() const
+Vector2u Player::getPosition() const
 {
-    return position;
+    return Vector2u(floatPosition + Vector2f(0.5, 0.5));
 }
 
 const Vector2f &Player::getFloatPosition() const
@@ -31,13 +32,13 @@ void Player::update()
 
 
     if (Keyboard::isKeyPressed(Keyboard::Up))
-        floatPosition.y--;
+        floatPosition.y -= 5;
     if (Keyboard::isKeyPressed(Keyboard::Down))
-        floatPosition.y++;
+        floatPosition.y += 5;
     if (Keyboard::isKeyPressed(Keyboard::Left))
-        floatPosition.x--;
+        floatPosition.x -= 5;
     if (Keyboard::isKeyPressed(Keyboard::Right))
-        floatPosition.x++;
+        floatPosition.x += 5;
 }
 
 void Player::aff(RenderTarget &target) const

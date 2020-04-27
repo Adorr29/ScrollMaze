@@ -7,11 +7,15 @@
 
 #include "World.hpp"
 
-World::World(const Vector2u &_size)
+World::World(const Vector2u &_size, const Vector2f &_cellSize)
+    : cellSize(_cellSize)
 {
+    const Vector2f windowSize(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height);
     Vector2u exit;
 
     create(_size);
+    origin.x = (windowSize.x - (size.x - 1) * cellSize.x) / 2.0;
+    origin.y = (windowSize.y - (size.y - 1) * cellSize.y) / 2.0;
     exit = Vector2u(rand() % (size.x - 2) + 1, rand() % (size.y - 2) + 1);
     if (rand() % 2)
         exit.x = rand() % 2 ? 0 : size.x - 1;
@@ -33,14 +37,14 @@ const Vector2u &World::getSize() const
     return size;
 }
 
+const Vector2f &World::getOrigin() const
+{
+    return origin;
+}
+
 const Vector2f &World::getCellSize() const
 {
     return cellSize;
-}
-
-void World::setCellSize(const Vector2f &_cellSize)
-{
-    cellSize = _cellSize;
 }
 
 void World::aff(RenderTarget &target) const
@@ -51,7 +55,7 @@ void World::aff(RenderTarget &target) const
     for (Uint32 i = 0; i < size.x; i++)
         for (Uint32 j = 0; j < size.y; j++) {
             sprite.setTexture(&textures[tab[i][j]]);
-            sprite.setPosition(i * cellSize.x, j * cellSize.y);
+            sprite.setPosition(i * cellSize.x + origin.x, j * cellSize.y + origin.y);
             target.draw(sprite);
         }
 }
