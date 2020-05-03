@@ -13,14 +13,14 @@ class Player
 {
 public:
     Player(const Vector2u &_position, const World &_world);
-    Vector2u getPosition() const;
-    const Vector2f &getFloatPosition() const;
+    const Vector2f &getPosition() const;
     const Vector2u &getSize() const;
     void update();
     void aff(RenderTarget &target) const;
 
 private:
     const World &world;
-    Vector2f floatPosition;
+    Vector2f position;
+    float speed;
     Texture texture;
 };

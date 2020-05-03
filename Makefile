@@ -20,6 +20,7 @@ OBJ		=	$(SRC:.cpp=.o)
 
 CXXFLAGS	+=	-I $(INCDIR)
 CXXFLAGS	+=	-W -Wall -Wextra
+CXXFLAGS	+=	-O3
 
 LDFLAGS		+=	-l sfml-system
 LDFLAGS		+=	-l sfml-window

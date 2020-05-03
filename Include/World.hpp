@@ -19,12 +19,20 @@ enum CellType
     TypeCount
 };
 
+struct Head
+{
+    Vector2u position;
+    Vector2u direction;
+};
+
 class World
 {
 public:
     World(const Vector2u &_size, const Vector2f &_cellSize);
     ~World();
     const Vector2u &getSize() const;
+    const CellType &getCell(const Uint32 &x, const Uint32 &y) const;
+    const CellType &getCell(const Vector2u &position) const;
     const Vector2f &getOrigin() const;
     const Vector2f &getCellSize() const;
     void aff(RenderTarget &target) const;
@@ -32,7 +40,10 @@ public:
 private:
     void loadTextures();
     void create(const Vector2u &_size);
-    void generate(const Vector2u &entry, const Vector2u &exit);
+    void generate(const Vector2u &start);
+    void generateExit();
+    bool canPlaceGround(const Vector2u &position) const;
+    bool onEdge(const Vector2u &position) const;
 
 private:
     Vector2u size;

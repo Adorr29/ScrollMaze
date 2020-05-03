@@ -15,12 +15,15 @@ using namespace sf;
 
 void camera(RenderWindow &window, View &view, const World &world, const Player &player)
 {
-    Vector2f playerPosition =  player.getFloatPosition();
+    Vector2f playerPosition;
 
-    playerPosition.x = max(playerPosition.x, world.getOrigin().x - world.getCellSize().x / (float)2 + window.getSize().x / (float)2);
-    playerPosition.y = max(playerPosition.y, world.getOrigin().y - world.getCellSize().y / (float)2 + window.getSize().y / (float)2);
-    playerPosition.x = min(playerPosition.x, world.getSize().x * world.getCellSize().x + world.getOrigin().x - world.getCellSize().x / (float)2 - window.getSize().x / (float)2);
-    playerPosition.y = min(playerPosition.y, world.getSize().y * world.getCellSize().y + world.getOrigin().y - world.getCellSize().y / (float)2 - window.getSize().y / (float)2);
+    playerPosition.x = player.getPosition().x * world.getCellSize().x + world.getOrigin().x;
+    playerPosition.y = player.getPosition().y * world.getCellSize().y + world.getOrigin().y;
+
+    playerPosition.x = max(playerPosition.x, world.getOrigin().x + window.getSize().x / (float)2);
+    playerPosition.y = max(playerPosition.y, world.getOrigin().y + window.getSize().y / (float)2);
+    playerPosition.x = min(playerPosition.x, world.getSize().x * world.getCellSize().x + world.getOrigin().x - window.getSize().x / (float)2);
+    playerPosition.y = min(playerPosition.y, world.getSize().y * world.getCellSize().y + world.getOrigin().y - window.getSize().y / (float)2);
 
     window.setPosition(Vector2i(playerPosition - Vector2f(window.getSize()) / (float)2));
     view.setCenter(Vector2f(window.getPosition()) + Vector2f(window.getSize()) / (float)2);
