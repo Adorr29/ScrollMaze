@@ -48,6 +48,8 @@ int main()
             if (event.type == Event::Closed)
                 window.close();
         player.update();
+        if (player.getPosition().x <= 0.1 || player.getPosition().y <= 0.1 || player.getPosition().x >= world.getSize().x - 1 + 0.9 || player.getPosition().y >= world.getSize().y - 1 + 0.9)
+            window.close();
         camera(window, view, world, player); //
         window.clear();
         world.aff(window);
