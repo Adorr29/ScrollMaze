@@ -19,6 +19,9 @@ public:
     void aff(RenderTarget &target) const;
 
 private:
+    void moveTo(const Vector2f &target);
+
+private:
     const World &world;
     Vector2f position;
     float speed;

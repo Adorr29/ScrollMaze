@@ -38,28 +38,25 @@ void Player::update()
         direction.x++;
 
     length = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
-    if (length <= 0)
-        return;
-    direction.x *= speed / length;
-    direction.y *= speed / length;
 
-    Vector2f newPosition = position + direction;
-    Vector2f nPosUR = newPosition + Vector2f(0.45, -0.45);
-    Vector2f nPosDR = newPosition + Vector2f(0.45, 0.45);
-    Vector2f nPosUL = newPosition + Vector2f(-0.45, -0.45);
-    Vector2f nPosDL = newPosition + Vector2f(-0.45, 0.45);
+    Vector2f target = position + direction;
+
+    Vector2f newPosition = position + direction * speed / length;
+    Vector2f nPosUR = newPosition + Vector2f(0.495, -0.495);
+    Vector2f nPosDR = newPosition + Vector2f(0.495, 0.495);
+    Vector2f nPosUL = newPosition + Vector2f(-0.495, -0.495);
+    Vector2f nPosDL = newPosition + Vector2f(-0.495, 0.495);
 
     if (direction.y > 0) {
         bool a = world.getCell(Vector2u(nPosDL)) == Wall;
         bool b = world.getCell(Vector2u(nPosDR)) == Wall;
 
         if (a || b) {
-            position.y = (int)position.y + 0.5;
-            direction.y = 0;
-            /*if (!a)
-                direction.x = -1;
+            target = Vector2f(position.x, (int)position.y + 0.5);
+            if (!a)
+                target = Vector2f((int)nPosDL.x + 0.5, target.y);
             else if (!b)
-            direction.x = 1;*/
+                target = Vector2f((int)nPosDR.x + 0.5, target.y);
         }
     }
     else if (direction.y < 0) {
@@ -67,27 +64,24 @@ void Player::update()
         bool b = world.getCell(Vector2u(nPosUR)) == Wall;
 
         if (a || b) {
-            position.y = (int)position.y + 0.5;
-            direction.y = 0;
-            /*if (!a)
-                direction.x = -1;
+            target = Vector2f(position.x, (int)position.y + 0.5);
+            if (!a)
+                target = Vector2f((int)nPosUL.x + 0.5, target.y);
             else if (!b)
-            direction.x = 1;*/
+                target = Vector2f((int)nPosUR.x + 0.5, target.y);
         }
     }
+
     if (direction.x > 0) {
         bool a = world.getCell(Vector2u(nPosUR)) == Wall;
         bool b = world.getCell(Vector2u(nPosDR)) == Wall;
 
         if (a || b) {
-            position.x = (int)position.x + 0.5;
-            direction.x = 0;
-            /*if (direction.y == 0) {
-                if (!a)
-                    direction.y = -1;
-                else if (!b)
-                    direction.y = 1;
-                    }*/
+            target = Vector2f((int)position.x + 0.5, position.y);
+            if (!a)
+                target = Vector2f(target.x, (int)nPosUR.y + 0.5);
+            else if (!b)
+                target = Vector2f(target.x, (int)nPosDR.y + 0.5);
         }
     }
     else if (direction.x < 0) {
@@ -95,137 +89,15 @@ void Player::update()
         bool b = world.getCell(Vector2u(nPosDL)) == Wall;
 
         if (a || b) {
-            position.x = (int)position.x + 0.5;
-            direction.x = 0;
-            /*if (direction.y == 0) {
-                if (!a)
-                    direction.y = -1;
-                else if (!b)
-                    direction.y = 1;
-                    }*/
+            target = Vector2f((int)position.x + 0.5, position.y);
+            if (!a)
+                target = Vector2f(target.x, (int)nPosUL.y + 0.5);
+            else if (!b)
+                target = Vector2f(target.x, (int)nPosDL.y + 0.5);
         }
     }
 
-    /*if (world.getCell(Vector2u(newPosition)) == Wall)
-      return;*/
-
-
-    length = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
-    if (length <= 0)
-        return;
-    direction.x *= speed / length;
-    direction.y *= speed / length;
-
-    position += direction;
-
-    /*if (direction.x == 0 && direction.y == 0)
-        return;
-
-    Vector2f newFloatPosition = floatPosition + direction;
-    Vector2f nFPosUR = newFloatPosition + Vector2f(world.getCellSize().x, -world.getCellSize().y) / (float)2;
-    Vector2f nFPosDR = newFloatPosition + Vector2f(world.getCellSize().x, world.getCellSize().y) / (float)2;
-    Vector2f nFPosUL = newFloatPosition + Vector2f(-world.getCellSize().x, -world.getCellSize().y) / (float)2;
-    Vector2f nFPosDL = newFloatPosition + Vector2f(-world.getCellSize().x, world.getCellSize().y) / (float)2;
-
-    if (direction.y > 0) {
-        bool a = world.getCell(convert(nFPosDL, world)) == Wall;
-        bool b = world.getCell(convert(nFPosDR, world)) == Wall;
-
-        if (a || b) {
-            direction.y = 0;
-            if (direction.x == 0) {
-                if (!a)
-                    direction.x = -1;
-                else if (!b)
-                    direction.x = 1;
-            }
-        }
-    }
-    else if (direction.y < 0) {
-        bool a = world.getCell(convert(nFPosUL, world)) == Wall;
-        bool b = world.getCell(convert(nFPosUR, world)) == Wall;
-
-        if (a || b) {
-            direction.y = 0;
-            if (direction.x == 0) {
-                if (!a)
-                    direction.x = -1;
-                else if (!b)
-                    direction.x = 1;
-            }
-        }
-    }
-    if (direction.x > 0) {
-        bool a = world.getCell(convert(nFPosUR, world)) == Wall;
-        bool b = world.getCell(convert(nFPosDR, world)) == Wall;
-
-        if (a || b) {
-            direction.x = 0;
-            if (direction.y == 0) {
-                if (!a)
-                    direction.y = -1;
-                else if (!b)
-                    direction.y = 1;
-            }
-        }
-    }
-    else if (direction.x < 0) {
-        bool a = world.getCell(convert(nFPosUL, world)) == Wall;
-        bool b = world.getCell(convert(nFPosDL, world)) == Wall;
-
-        if (a || b) {
-            direction.x = 0;
-            if (direction.y == 0) {
-                if (!a)
-                    direction.y = -1;
-                else if (!b)
-                    direction.y = 1;
-            }
-        }
-    }
-
-    length = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
-    if (length <= 0)
-        return;
-    direction.x *= speed / length;
-    direction.y *= speed / length;
-    floatPosition += direction;*/
-
-
-    //cerr << "position : " << getPosition().x << " " << getPosition().y << endl; // tmp
-    //cerr << "newPosition : " << newPosition.x << " " << newPosition.y << endl; // tmp
-
-    /*if (world.getCell(newPosition) == Wall)
-      return;*/
-
-    /*floatPosition.x += direction.x * speed;
-    floatPosition.y += direction.y * speed;
-
-    Vector2f newFloatPos = Vector2f(newPosition.x * world.getCellSize().x, newPosition.y * world.getCellSize().y) + world.getOrigin();
-    Vector2f posUR = newFloatPos + Vector2f(world.getCellSize().x, -world.getCellSize().y) / (float)2;
-    Vector2f posDR = newFloatPos + Vector2f(world.getCellSize().x, world.getCellSize().y) / (float)2;
-    Vector2f posUL = newFloatPos + Vector2f(-world.getCellSize().x, -world.getCellSize().y) / (float)2;
-    Vector2f posDL = newFloatPos + Vector2f(-world.getCellSize().x, world.getCellSize().y) / (float)2;*/
-
-    /*if (world.getCell(newPosition) == Wall) {
-        if (direction.y > 0) {
-            if (newPosition.y * world.getCellSize().y + world.getOrigin().y - floatPosition.y < world.getCellSize().y)
-                floatPosition.y = getPosition().y * world.getCellSize().y + world.getOrigin().y;
-        }
-        else if (direction.y < 0) {
-            if (floatPosition.y - (newPosition.y * world.getCellSize().y + world.getOrigin().y) < world.getCellSize().y)
-                floatPosition.y = getPosition().y * world.getCellSize().y + world.getOrigin().y;
-        }
-
-        if (direction.x > 0) {
-            if (newPosition.x * world.getCellSize().x + world.getOrigin().x - floatPosition.x < world.getCellSize().x)
-                floatPosition.x = getPosition().x * world.getCellSize().x + world.getOrigin().x;
-        }
-        else if (direction.x < 0) {
-            if (floatPosition.x - (newPosition.x * world.getCellSize().x + world.getOrigin().x) < world.getCellSize().x)
-                floatPosition.x = getPosition().x * world.getCellSize().x + world.getOrigin().x;
-        }
-        }*/
+    moveTo(target);
 }
 
 void Player::aff(RenderTarget &target) const
@@ -239,4 +111,15 @@ void Player::aff(RenderTarget &target) const
     sprite.setTexture(&texture);
     sprite.setPosition(spritePosition);
     target.draw(sprite);
+}
+
+void Player::moveTo(const Vector2f &target)
+{
+    Vector2f direction = target - position;
+    float sqrLength = pow(direction.x, 2) + pow(direction.y, 2);
+
+    if (pow(speed, 2) >= sqrLength)
+        position = target;
+    else
+        position += direction * speed / sqrt(sqrLength);
 }
