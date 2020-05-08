@@ -27,3 +27,5 @@ private:
     float speed;
     Texture texture;
 };
+
+typedef unique_ptr<Player> PlayerPtr;

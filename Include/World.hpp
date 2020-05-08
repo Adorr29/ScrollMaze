@@ -19,7 +19,7 @@ enum CellType
     TypeCount
 };
 
-struct Head
+struct Head // only for World::generate
 {
     Vector2u position;
     Vector2u direction;
@@ -52,3 +52,5 @@ private:
     Vector2f cellSize;
     Texture textures[TypeCount];
 };
+
+typedef unique_ptr<World> WorldPtr;

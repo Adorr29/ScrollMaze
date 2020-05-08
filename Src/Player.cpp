@@ -22,7 +22,6 @@ const Vector2f &Player::getPosition() const
     return position;
 }
 
-#include <iostream> // tmp
 void Player::update()
 {
     Vector2f direction;
