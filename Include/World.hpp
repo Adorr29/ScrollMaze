@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <memory>
 #include <SFML/Graphics.hpp>
 
 using namespace std;
